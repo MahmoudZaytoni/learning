@@ -1,0 +1,11 @@
+# Ignore All
+*
+
+# Unignore all dirs
+!*/
+
+# Unignore all with extensions
+!*.*
+
+# Ignore `bin` dir
+bin/
