@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
 
-string res = "    "; // 4
+string res = "    "; // length 4
+// Generate all possible subsets of length of the string
 void all_subsets(int idx) {
   if (idx == res.size()) {
     cout << res << "\n";
@@ -9,16 +10,10 @@ void all_subsets(int idx) {
   }
 
   // try 0 for this idx
-  res[idx] = 'a';
+  res[idx] = '0';
   all_subsets(idx+1);
 
-  res[idx] = 'b';
-  all_subsets(idx+1);
-
-  res[idx] = 'c';
-  all_subsets(idx+1);
-
-  res[idx] = 'd';
+  res[idx] = '1';
   all_subsets(idx+1);
 
   res[idx] = ' ';
