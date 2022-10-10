@@ -1,8 +1,3 @@
-/****************************************************
- *** Problem Number : 4
- *** Diffculty      : Medium
- *** URL            : https://leetcode.com/problems/longest-palindromic-substring/
-*****************************************************/
 #include <bits/stdc++.h>
 using namespace std;
 

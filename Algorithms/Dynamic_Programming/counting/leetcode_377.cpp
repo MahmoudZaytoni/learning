@@ -29,6 +29,7 @@ int count(vector<int> &nums, int target) {
 class Solution {
 public:
   int combinationSum4(vector<int>& nums, int target) {
-    
+    memset(memory, -1, sizeof(memory));
+    return count(nums, target);
   }
 };

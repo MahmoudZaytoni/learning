@@ -53,6 +53,7 @@ class Solution {
 
 
 public:
+    /*
     int lengthOfLIS(vector<int>& nums) {
         memset(memory, -1, sizeof(memory));
         arr = nums;
@@ -65,6 +66,7 @@ public:
 
         return ret;
     }
+    */
 
     // Code imporvement
     int lengthOfLIS(vector<int>& nums) {
@@ -81,7 +83,8 @@ int main()
   ios::sync_with_stdio(0);
   cin.tie(0);
   memset(memory, -1, sizeof(memory));
-  // cout << LIS_V1(0, arr.size());
+  Solution s;
+  cout << s.lengthOfLIS(arr) << "\n";
 
   return 0;
 }

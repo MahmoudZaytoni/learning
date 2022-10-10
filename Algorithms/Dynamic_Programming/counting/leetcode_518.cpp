@@ -25,7 +25,7 @@ class Solution {
     int leave = count_coins_change(coins, idx + 1, target);
     int pick = 0;
     if (coins[idx] <= target)
-    pick = count_coins_change(coins, idx, target - coins[idx]);
+      pick = count_coins_change(coins, idx, target - coins[idx]);
 
     return ret = leave + pick;
   }
