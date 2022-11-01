@@ -14,6 +14,10 @@ typedef long long ll;
 
 int main() 
 {
+#ifndef ONLINE_JUDGE
+  freopen("in.txt", "rt", stdin);
+  freopen("out.txt", "wt", stdout);
+#endif
   ios::sync_with_stdio(0);
   cin.tie(0);
   int t = 1;

@@ -12,6 +12,24 @@
 using namespace std;
 typedef long long ll;
 
+int n;
+vector<int> v;
+
+bool valid(int k) {
+  vector<int> a = v;
+  int l = 0, r = n - 1;
+  for (int stage = k; stage >= 1; stage--) {
+    while (r >= 0 && a[r] > stage)
+      r--;
+    if (r < 0)
+      return 0;
+    
+    a[l++] += a[r];
+    r--;
+  }
+  return 1;
+}
+
 int main() 
 {
   ios::sync_with_stdio(0);
@@ -19,21 +37,15 @@ int main()
   int t = 1;
   cin >> t;
   while (t--) {
-    int n; cin >> n;
-    vector<int> v(n);
+    cin >> n;
+    v = vector<int>(n);
     for (auto &x : v) cin >> x;
-    set<int> st;
-    for (int i = 0; i < n; i++)
-      st.insert(v[i]);
-    if (n == 1) {
-      cout << 1 << "\n";
-      continue;
-    }
-    if (st.size() == 1 && n != 1) {
-      cout << 0 << "\n";
-      continue;
-    }
-    cout << st.size() << "\n";
+    sort(all(v));
+    int ans = 0;
+    for (int i = 1; i <= 100; i++)
+      if (valid(i))
+        ans = i;
+    cout << ans << "\n";
   }
   return 0;
 }
