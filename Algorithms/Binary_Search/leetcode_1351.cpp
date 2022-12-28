@@ -1,10 +1,3 @@
-/***********************************************
- * Name: Mahmoud Ahmed Zaytoni
- * ID: 2021425
- * Group: G7
- * Assignment: 4
- * Leet Code Account: https://leetcode.com/Mahmoud_Zaytoni/
-**************************************************/
 
 #include<iostream>
 #include<vector>
@@ -30,14 +23,14 @@ public:
             counter = binarySearch(grid);
         }
         else if (method == 3) { // follow-up method
-             counter = followUp(grid);
+            counter = followUp(grid);
         } else {
-             counter = extraSolutionOptimization(grid);
+            counter = extraSolutionOptimization(grid);
         }
         return counter;
     }
 
-    int bruteForce(vector<vector<int>>& grid) { // TC: O(n*m), SC: (1)
+    int bruteForce(vector<vector<int>>& grid) { // TC: O(n*m), SC: O(1)
         // implement your code here
         int row = grid.size(), cols = grid[0].size();
 
@@ -51,7 +44,7 @@ public:
         return cnt;
     }
 
-    int binarySearch(vector<vector<int>>& grid) {
+    int binarySearch(vector<vector<int>>& grid) { // TC = O(NlogM), SC = O(1)
         // implement your code here
         int ans = 0;
         int rows = grid.size(), cols = (int)grid[0].size();
@@ -77,15 +70,15 @@ public:
       return true;
     }
 
-    int dfs(int r, int c, vector<vector<int>> &grid) {
+    int dfs(int r, int c, vector<vector<int>> &grid) { // TC = O(N) - SC = O(N)
+    // N = Number of negative numbers on grid
       // if cell out of grid or cell is positive return 0
       if (!isValid(r,c,grid) || grid[r][c] >= 0) 
         return 0;
 
       // mark it in order to don't visit this cell again
       grid[r][c] = 0;
-      int res = 1;
-
+      int res = 1; // SC = O(N), becase it will created O(N) times on stack
       // traverse on 4 directions
       /*
       . X .
@@ -101,8 +94,10 @@ public:
 
     int followUp(vector<vector<int>>& grid) {  // BFS , DFS - graphs
         // implement your code here
+        // TC = O(N), SC = O(N)
         return dfs((int)grid.size() - 1, (int)grid[0].size() - 1, grid);
     }
+
 
     /*  
         - = negative number , + = positive number
@@ -116,7 +111,7 @@ public:
         and the time complexty will be O(n + m)
     */
 
-    int extraSolutionOptimization(vector<vector<int>>& grid) {
+    int extraSolutionOptimization(vector<vector<int>>& grid) { // TC = O(N+M) , SC = O(1)
         int rows = grid.size(), cols = (int)grid[0].size();
         int ans = 0;
         int j = cols - 1;
@@ -128,6 +123,8 @@ public:
         }
         return ans;
     }
+
+
 };
 
 

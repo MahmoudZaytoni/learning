@@ -20,14 +20,14 @@ int main()
   cin >> t;
   while (t--) {
     int n; cin >> n;
-    int a1; cin >> a1;
-    int x;
-    for (int i = 1; i < n; i++)
-      cin >> x;
-    if (a1 != 1)  
-      cout << "NO\n";
-    else
-      cout << "YES\n";
+    vector<int> v(n);
+    for (auto &x : v) cin >> x;
+    int o = 0, a = *max_element(all(v));
+    for (int i = 0; i < n; i++) {
+      a &= v[i];
+      o |= v[i];
+    }
+    cout << o - a << "\n";
   }
   return 0;
 }

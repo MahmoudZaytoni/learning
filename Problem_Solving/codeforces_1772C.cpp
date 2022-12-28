@@ -23,8 +23,20 @@ int main()
   int t = 1;
   cin >> t;
   while (t--) {
-    int n; cin >> n;
-    cout << (n + 1) / 2 << "\n";
+    int k, n; cin >> k >> n;
+    int cur = 1;
+    int i = 1;
+    for (i; i <= k; i++) {
+      cout << cur << " ";
+      if (n-(cur+i) + 1< k - i)
+        break;
+      cur += i;
+    }
+    i++;
+    for (i ; i<= k; i++)
+      cout << ++cur << " ";
+    cout << endl;
+
   }
   return 0;
 }

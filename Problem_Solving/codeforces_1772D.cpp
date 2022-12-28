@@ -23,33 +23,27 @@ int main()
   int t = 1;
   cin >> t;
   while (t--) {
-    ll n, k;
-    cin >> n >> k;
-    vector<ll> v(n), a;
+    ll n; cin >> n;
+    vector<ll> v(n);
     for (auto &x : v) cin >> x;
-    sort(all(v), greater<ll>());
 
-    map<ll, bool> mp;
+    ll mnx = 1e9+5, mx = 0;
+    for (int i = 0; i < n-1; i++) {
+      ll x = v[i];
+      ll y = v[i+1];
 
-    for (ll i = 1; i <= 1e16; i *= k) 
-      a.push_back(i);
-
-    sort(all(a), greater<ll>());
-
-    bool ok = true;
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < sz(a); j++) {
-        if (v[i] >= a[j] && mp[a[j]] != 1) {
-          v[i] -= a[j];
-          mp[a[j]] = true;
-        }
-      }
-      if (v[i] != 0) {
-        ok = false;
-        break;
+      if (x < y)
+        mnx = min(mnx, (x + y) / 2);
+      else if (x > y){
+        mx = max(mx, (x + y + 1) / 2);
       }
     }
-    cout << ((ok) ? "YES\n" : "NO\n");
+
+    if (mnx >= mx)
+      cout << (mx + mnx) / 2 << "\n";
+    else
+      cout << -1 << "\n";
+  
   }
   return 0;
 }
