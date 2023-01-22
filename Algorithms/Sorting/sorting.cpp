@@ -18,7 +18,7 @@ void insertion_sort(vector<int>& nums) {
 void insertion_sort_v2(vector<int>& nums) {
     for (int i = 1; i < nums.size(); i++) {
         int j = i - 1;
-        while (j >= 0 && nums[i] > nums[j]) j--;
+        while (j >= 0 && nums[i] < nums[j]) j--;
         swap(nums[i], nums[++j]);
         i = j;
     }
@@ -148,14 +148,14 @@ void count_sort_strings_v2(vector<string>& Array) {
 
 int main()
 {
-    vector<int> v{-1, -10, -20, -200, 1, 5, 2, 29, 10, 10, 0 };
+    vector<int> v{-1, -10, -20, -200, 1, 5, 2, 29, 10, 10, 0, -1000 };
     //insertion_sort(v);
-    //insertion_sort_v2(v);
+    insertion_sort_v2(v);
     //insertion_sort_v3(v);
     //selection_sort(v);
     //count_sort(v);     // ONLY Positive Values
     //count_sort_v2(v);
-    count_sort_v3(v);
+    //count_sort_v3(v);
 
     for (auto it : v) cout << it << " ";
     return 0;
