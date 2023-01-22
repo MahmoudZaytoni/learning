@@ -10,3 +10,5 @@
 # Ignore `bin` dir
 bin/
 .vscode/
+in.txt
+out.txt
