@@ -7,15 +7,6 @@
 #include <assert.h>
 using namespace std;
 
-struct Node {
-    Node *left {};
-    Node *right{};
-    char data {};
-
-    Node(int data) :
-        data(data) {
-        }
-};
 
 class BinaryTree {
 
@@ -31,7 +22,7 @@ private:
     }
 
 public:
-    BinaryTree(int data) :
+    BinaryTree(char data) :
         data(data) {
         }
 
@@ -54,6 +45,35 @@ public:
         this->right = root->right;
     }
 
+    BinaryTree(deque<char> &preorder, deque<char> &inorder, int inorder_start = 0, int inorder_end = -1) {
+        if (inorder_end == -1)
+            inorder_end = (int)inorder.size() - 1;
+
+        data = preorder.front();
+        preorder.pop_front();
+
+        for (int split = inorder_start; split <= inorder_end; split++) {
+            if (inorder[split] == data) {
+                if (inorder_start < split)
+                    left = new BinaryTree(preorder, inorder, inorder_start, split-1);
+                if (split < inorder_end)
+                    right = new BinaryTree(preorder, inorder, split+1, inorder_end); 
+            }
+        }
+    }
+
+    BinaryTree(queue<pair<int,int>> &preorder_queue) {
+        // pair< value, is_leaf>
+        pair<int,int> p = preorder_queue.front();
+        preorder_queue.pop();
+        data = p.first;
+        if (!p.second){
+            left = new BinaryTree(preorder_queue);
+            right = new BinaryTree(preorder_queue);
+        }
+
+    }
+
     ~BinaryTree() {
         clear();
     }
@@ -73,11 +93,21 @@ public:
     void print_In_order() {
         if (left)
             left->print_In_order();
+        if (data == ' ')
+            cout << "x" << " ";
         cout << data << " ";
         if (right) 
             right->print_In_order();
     }
 
+    void print_preorder() {
+        cout << data << " ";
+        if (left)
+            left->print_preorder();
+        if (right) 
+            right->print_preorder();
+    }
+    
     void print_In_order_itertaive() {
         stack<pair<BinaryTree*, bool>> nodes;
         nodes.push(make_pair(this,false));
@@ -97,6 +127,22 @@ public:
             }
         }
         cout << "\n";
+    }
+
+    void print_In_order_iterative2() {
+        stack<BinaryTree*> st;
+        BinaryTree *cur = this;
+        while (!st.empty() || cur) {
+            while (cur) {
+                st.push(cur);
+                cur = cur->left;
+            }
+            cur = st.top();
+            cout << cur->data << " ";
+            st.pop();
+            cur = cur->right;
+        }
+        cout << endl;
     }
 
     void print_inorder_expression() {
@@ -135,7 +181,6 @@ public:
         }
         cout << "\n";
     }
-
 
     void print_nodes_level(int level) {
         if (level == 0) 
@@ -280,7 +325,7 @@ public:
     void traverse_left_boundry() {
         cout << data << " ";
         if (left) 
-            left->traverse_left_boundry();
+            left->traverse_left_boundry(); 
         else if (right) 
             right->traverse_left_boundry();
     }
@@ -326,36 +371,54 @@ public:
     bool is_complete() {
         queue<BinaryTree*> q;
         q.push(this);
-
+        bool no_more_allowed = false;
         while (!q.empty()) {
             BinaryTree *cur = q.front();
             q.pop();
-            bool l = 0, r = 0;
-            if (cur->left) 
-                q.push(cur->left), l = 1;
-            if (cur->right)
-                q.push(cur->right), r = 1;
-
-            if (!(l^r))
-                return 0;
+            if (cur->left) {
+                if (no_more_allowed)
+                    return 0;
+                q.push(cur->left);
+            } else
+                no_more_allowed = true;
+            
+            if (cur->right) {
+                if (no_more_allowed)
+                    return 0;
+                q.push(cur->right);
+            } else
+                no_more_allowed = true;
         }
         return 1;
     }
 };
 
-void print_In_order(Node* current) {
-    if (!current)
-        return;
-    Node *temp_left = current->left;
-    Node *temp_rigth = current->right;
-    print_In_order(current->left);
-    cout << current->data;
-    print_In_order(current->right);
-}
+struct Node {
+    char data {};
+    Node *left;
+    Node *right;
 
+    Node(int data) :
+        data(data) {
+        }
+};
 
-int main()
-{
+class BinaryTree_nodes {
+    Node *root;
+public:
+
+    void print_In_order(Node *cur) {
+        if (!cur)
+            return;
+        if (cur->left)
+            print_In_order(cur->left);
+        cout << cur->data << " ";
+        if (cur->right)
+            print_In_order(cur->right);
+    }
+};
+
+void main2() {
     Node* plus = new Node('+');
     plus->left = new Node('2');
     plus->right = new Node('3');
@@ -373,22 +436,37 @@ int main()
     multiply->left = plus;
     multiply->right = minus;
 
-    //print_In_order(multiply);
-    BinaryTree bt("23+4*");
+    BinaryTree_nodes bt;
+    bt.print_In_order(multiply);
+}
+
+
+int main()
+{
+
     //BinaryTree bt("534*2^+");
     //bt.add({1, 2, 3}, {'L', 'R', 'L'});
     //bt.add({1, 4}, {'L', 'L'});
     //bt.add({6, 7}, {'R', 'L'});
-    cout << "All Tree : "; bt.print_In_order(); cout << endl;
-    cout << "All Tree : "; bt.print_In_order_itertaive(); cout << endl;
-    cout << "Total Nodes: " << bt.total_nodes() << endl;
+    BinaryTree bt("23+4*");
+    cout << "Tree In order: "; bt.print_In_order(); cout << endl;
+    cout << "Tree In order iterative: "; bt.print_In_order_itertaive(); cout << endl;
+    cout << "Tree In order iterative2: ";bt.print_In_order_iterative2(); cout << endl;
+    cout << "Tree In order Expression: "; bt.print_inorder_expression(); cout << endl;
+    cout << "Tree leverl Order: "; bt.level_order_traversal_recursive(); cout << endl;
+    cout << "Tree level Order Spirat: "; bt.level_order_spiral(); cout << endl;
+    cout << "Tree Preorder: "; bt.print_preorder(); cout << endl;
+
+    cout << "Total Number Nodes: " << bt.total_nodes() << endl;
     cout << "Height : " << bt.tree_hight() << endl;
     cout << "max node: " << bt.tree_max() << endl;
     cout << "Leafes nodes: " << bt.leafs_count() << endl;
+
     cout << "Check if 5 exist " << bt.if_exists(5) << endl;
     cout << "Check if 10 exist " << bt.if_exists(10) << endl;
     cout << "Check if tree perfect " << bt.is_perfect() << endl;
     cout << "Check if tree prefect with formuala " << bt.is_perfect_formula() << endl;
+
     cout << "Left boundry "; bt.traverse_left_boundry(); cout << endl;
     pair<int,int> d = bt.tree_diameter();
     cout << "Tree Diamter " << d.first << "\n";
@@ -398,8 +476,37 @@ int main()
     diam = 0;
     bt.tree_diameter_v3(diam);
     cout << diam << "\n";
-    cout << "All Tree: "; bt.print_inorder_expression(); cout << endl;
-    bt.level_order_traversal_recursive();
-    bt.level_order_spiral();
+
+    //////////////////////////////////////////////////
+    deque<char> preorder;
+    preorder.push_back('*');
+    preorder.push_back('2');
+    preorder.push_back('+');
+    preorder.push_back('3');
+    preorder.push_back('4');
+    deque<char> inorder;
+    inorder.push_back('2');
+    inorder.push_back('+');
+    inorder.push_back('3');
+    inorder.push_back('*');
+    inorder.push_back('4');
+    BinaryTree bt2(preorder, inorder);
+    cout << "bt2 : inorder: ";
+    bt2.print_In_order();
+    cout << endl;
+    cout << "bt2" << bt2.is_complete() << endl;
+
+    ////////////////////////////////////////////
+    queue<pair<int,int>> q;
+    q.push({'1',0});
+    q.push({'2',0});
+    q.push({'3',1});
+    q.push({'4',1});
+    q.push({'5',0});
+    q.push({'6',1});
+    q.push({'7',1});
+    BinaryTree bt3(q);
+    bt3.print_preorder();
+    cout << "bt3" << bt3.is_complete() << endl;
     return 0;
 }
