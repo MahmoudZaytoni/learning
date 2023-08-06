@@ -97,6 +97,31 @@ public:
     }
     return false;
   }
+  
+  void successor_queries(deque<int> &queries, vector<int> &answer, vector<int> &traversal) {
+    if (queries.empty())
+      return;
+    
+    if (left && queries.front() < data) {
+      left->successor_queries(queries, answer, traversal);
+
+      if (queries.empty())
+        return;
+    }
+
+    if (!traversal.empty() && traversal.back() == queries.front()) {
+      answer.push_back(data);
+      queries.pop_front();
+
+      if (queries.empty())
+        return;
+    }
+
+    traversal.push_back(data);
+    
+    if (right && queries.front() >= data)
+      right->successor_queries(queries, answer, traversal);
+  }
 };
 
 int main() {
